@@ -8,21 +8,20 @@
 # Install native apps
 
 # daily
-brew cask install spectacle
+brew cask install --appdir="$HOME/Applications" spectacle
 
 # dev
-brew cask install iterm2
-brew cask install visual-studio-code-insiders 
+brew cask install --appdir="$HOME/Applications" iterm2
+brew cask install --appdir="$HOME/Applications" visual-studio-code-insiders 
 
 # less often
-brew cask install disk-inventory-x
-brew cask install vlc
+brew cask install --appdir="$HOME/Applications" disk-inventory-x
+brew cask install --appdir="$HOME/Applications" vlc
 
 # Fonts
 brew tap homebrew/cask-fonts 
-brew cask install font-fira-code
-brew cask install font-menlo-for-powerline
-
+brew cask install --appdir="$HOME/Applications" font-fira-code
+brew cask install --appdir="$HOME/Applications" font-menlo-for-powerline
 
 # Install at the global level
 brew cask install --appdir="/Applications" google-chrome
