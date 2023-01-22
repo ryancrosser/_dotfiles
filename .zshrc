@@ -1,99 +1,144 @@
-# DEFAULT_USER="Ryan"
+# history
+HISTSIZE=50000
+SAVEHIST=10000
+
+# DEFAULT_USER="<name>"
 DEFAULT_USER=`whoami`
 
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+source ~/antigen.zsh
 
-# Path to your oh-my-zsh installation.
-export ZSH=/Users/ryancrosser/.oh-my-zsh
+antigen bundles <<EOBUNDLES
+  command-not-found
+  colored-man-pages
+  MichaelAquilina/zsh-you-should-use
+  z
+  # zsh-users/zsh-autosuggestions
+  # zsh-users/zsh-completions
+  # zsh-users/zsh-syntax-highlighting
+EOBUNDLES
+antigen apply
 
-# Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="powerlevel9k/powerlevel9k"
+setopt auto_cd
 
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
 
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
-HYPHEN_INSENSITIVE="true"
+# prefer US English & utf-8
+export LC_ALL="en_US.UTF-8"
+export LANG="en_US"
+# Make Python use UTF-8 encoding for output to stdin, stdout, and stderr.
+export PYTHONIOENCODING='UTF-8'
 
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
+# Homebrew
+export HOMEBREW_CASK_OPTS="--appdir=~/Applications --fontdir=/Library/Fonts"
+export HOMEBREW_NO_ANALYTICS=1
+export HOMEBREW_BUNDLE_FILE="~/Brewfile"
 
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
+export NVM_DIR="$HOME/.nvm"
+  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
+eval "$(/opt/homebrew/bin/brew shellenv)"
+export PATH="/opt/homebrew/bin:${PATH}"
+eval "$(starship init zsh)"
 
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
+# Add Deno scripts to path
+export PATH="/Users/rcrosser/.deno/bin:$PATH"
+export PATH="$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin"
 
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
 
-# Uncomment the following line to display red dots whilst waiting for completion.
-COMPLETION_WAITING_DOTS="true"
+# load the rest of the configs
+source $HOME/.aliases
 
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
+export PATH="$PATH:/Users/rcrosser/.kit/bin"
 
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# HIST_STAMPS="mm/dd/yyyy"
+# pnpm
+export PNPM_HOME="/Users/rcrosser/Library/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+# pnpm end
 
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
+# make new dir and cd into it
+take() {
+	mkdir -p $1
+	cd $1
+}
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
-plugins+=(zsh-autosuggestions)
-plugins+=(zsh-nvm)
+dev-browser () {
+  URL=""
 
-source $ZSH/oh-my-zsh.sh
+  re_isanum='^[0-9]+$'
+  if [ $# -eq 0 ] ; then
+    URL="http://localhost:8000"
+  elif [[ $1 =~ $re_isanum ]] ; then
+    URL="http://localhost:$1"
+  else
+    URL="$1"
+  fi
 
-# User configuration
+  open -a "Google Chrome" -n "$URL" --args \
+    --disable-extensions \
+    --disable-component-extensions-with-background-pages \
+    --no-default-browser-check \
+    --disable-client-side-phishing-detection \
+    --disable-default-apps \
+    --no-first-run \
+    --use-fake-device-for-media-stream \
+    --disable-background-timer-throttling \
+    --disable-background-networking \
+    --disable-breakpad \
+    --disable-domain-reliability \
+    --disable-sync
 
-# export MANPATH="/usr/local/man:$MANPATH"
+  echo "Opening "$URL" in Google Chrome"
+}
 
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
-# export NVM_DIR="$HOME/.nvm"
-# . "/usr/local/opt/nvm/nvm.sh"
-
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 source ~/.aliases
-source ~/.exports
-source ~/.functions
+
+#####################
+
+
+
+
+
+
+
+port-forward(){
+  service=$1
+  port=$2
+
+  if [ $# -eq 0 ]; then
+    echo "You must provide a port"
+    return
+  elif [[ "$2" =~ ^[0-9]+$ ]] && [[ "$2" -lt 1 || "$2" -gt 65535 ]]; then
+    echo "Invalid port: $2"
+    return
+  else
+    port="$2"
+  fi
+
+  ssh -t -i /Users/rcrosser/iowa-admin-dev-20220112.pem -L ${port}:localhost:${port} ec2-user@52.87.224.103;
+  sleep 5;
+  for i in `env | grep AWS | cut -d '=' -f 1`; do unset $i; done;
+  aws sts assume-role --role-arn arn:aws:iam::494101600798:role/EKS-role --role-session-name iowa | jq -r '.Credentials | "export AWS_ACCESS_KEY_ID=\(.AccessKeyId)\nexport AWS_SECRET_ACCESS_KEY=\(.SecretAccessKey)\nexport AWS_SESSION_TOKEN=\(.SessionToken)"'
+  # aws sts get-caller-identity;
+  # kubectl port-forward -n apps svc/$servive $port:$port;
+  # bash;
+}
+
+# forward(){
+#   servive=$1
+#   port=$2
+
+#   if [ $# -eq 0 ]; then
+#     echo "You must provide a port"
+#     return
+#   elif [[ "$port" =~ ^[0-9]+$ ]] && [[ "$port" -lt 1 || "$port" -gt 65535 ]]; then
+#     echo "Invalid port: $port"
+#     return
+#   fi
+
+#   for i in `env | grep AWS | cut -d '=' -f 1`; do unset $i; done
+#   eval $(aws sts assume-role --role-arn arn:aws:iam::494101600798:role/EKS-role --role-session-name iowa | jq -r '.Credentials | "export AWS_ACCESS_KEY_ID=\(.AccessKeyId)\nexport AWS_SECRET_ACCESS_KEY=\(.SecretAccessKey)\nexport AWS_SESSION_TOKEN=\(.SessionToken)\n"')
+#   aws sts get-caller-identity
+
+#   eval $(k port-forward -n apps svc/$servive $port:$port)
+# }

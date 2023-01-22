@@ -35,6 +35,9 @@
 
 [core]
   # insanely beautiful diffs
+  preloadindex = true
+	fscache = true
+	excludesfile = /Users/rcrosser/.gitignore_global
   pager = diff-so-fancy | less -r
 [color "branch"]
   current = yellow reverse
@@ -56,10 +59,16 @@
 [help]
   autocorrect = 1
 # push easily. http://stackoverflow.com/a/23918418/89484
+[worktree]
+	guessRemote = true
+[pull]
+	ff = true
 [push]
   default = current
 [include]
   path = ~/.gitconfig.local
+[init]
+	defaultBranch = main
 [difftool "Kaleidoscope"]
   cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 [diff]
@@ -69,13 +78,19 @@
 [mergetool "Kaleidoscope"]
   cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
   trustExitCode = true
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path =
+[mergetool "sourcetree"]
+	cmd = /Users/rcrosser/Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
 [mergetool]
   prompt = false
 [merge]
   tool = Kaleidoscope
 [filter "lfs"]
   clean = git-lfs clean %f
-  smudge = git-lfs smudge %f
+  smudge = git-lfs smudge %fçç
   required = true
 [color "diff-highlight"]
 	oldNormal = red bold
